@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Music → 3D Prototype
+
+Set the following environment variables before running:
+
+- `OPENAI_API_KEY`: your OpenAI API key
+- `MESHY_API_KEY`: your Meshy API key
+
+Endpoints:
+- `POST /api/music3d` (multipart/form-data): fields `audio` (File), `notes` (string). Returns `{ analysis, meshyParams, meshy: { taskId } }`.
+- `GET /api/music3d?taskId=...`: polls Meshy job status; returns Meshy task JSON.
+
+UI:
+- Navigate to `/music3d` to upload or record audio, add notes, submit, and view the generated model or download link when ready.
+
+Notes:
+- Audio is sent to OpenAI Responses API (gpt-4o-mini) with `input_audio` and your prompt. The model output is parsed for a Meshy JSON block; if parsing fails, we still start a Meshy job with the raw prompt fallback.
+- Meshy API fields and response structure may vary by account; adjust the request/response mapping in `src/app/api/music3d/route.ts` as needed.
