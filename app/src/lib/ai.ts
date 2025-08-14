@@ -5,7 +5,7 @@ export async function analyzeRequirement(userQuery: string): Promise<Requirement
   const client = getOpenAIClient();
   const system = `You extract structured constraints from a user's restaurant request and provide a brief rationale. Do not reveal chain-of-thought or step-by-step reasoning. Provide a concise summary only.`;
   const user = `User request: ${userQuery}\nReturn JSON with: reasoningSummary (<= 60 words) and extractedConstraints with fields: cuisinePreferences[], ambiancePreferences[], priceCeiling (number|null), dietaryNeeds[], occasion, noiseLevel(one of quiet|moderate|lively|null), mustHaves[], avoid[], otherNotes[], keywords[].`;
-  const response = await client.responses.create({
+  const response = await (client.responses.create as any)({
     model: 'gpt-4.1-mini',
     temperature: 0.2,
     max_output_tokens: 600,
@@ -61,7 +61,7 @@ export async function scoreRestaurantsAgainstRequirement(
     })),
   )}\n\nReturn JSON array of objects: { placeId, aiRating (1.0-5.0), subratings: { environment(1-5), foodQuality(1-5), service(1-5), price(number avg spend) }, adjectives: { environment: [{adjective, count}], food: [...], service: [...] } }. Use specific adjectives (e.g., fresh, quiet, cozy, smoky, greasy, prompt, inattentive).`;
 
-  const response = await client.responses.create({
+  const response = await (client.responses.create as any)({
     model: 'gpt-4.1-mini',
     temperature: 0.2,
     max_output_tokens: 4000,

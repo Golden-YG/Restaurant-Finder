@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { ChatBox } from '@/components/ChatBox';
 import { FilterBar, Filters } from '@/components/FilterBar';
-import { RestaurantMap } from '@/components/Map';
 import { LatLng, Restaurant, SearchRestaurantsResponse } from '@/types';
+
+const RestaurantMap = dynamic(() => import('@/components/Map').then(m => m.RestaurantMap), { ssr: false });
 
 export default function Home() {
   const [userLoc, setUserLoc] = useState<LatLng | null>(null);
